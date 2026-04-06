@@ -19,7 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnit4Runner"
     }
 
     buildTypes {
@@ -42,6 +42,16 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.core.testing)
+
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
