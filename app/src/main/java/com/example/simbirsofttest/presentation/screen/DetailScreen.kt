@@ -1,61 +1,68 @@
 package com.example.simbirsofttest.presentation.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.* // Обязательно для getValue/collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.simbirsofttest.data.Task
+import com.example.simbirsofttest.R
+import com.example.simbirsofttest.presentation.TaskViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    task: Task?,
-    navController: NavController
+    taskId: Int,
+    navController: NavController,
+    viewModel: TaskViewModel = koinViewModel()
 ) {
+
+    val allTasks by viewModel.allTasks.collectAsState()
+    val task = allTasks.find { it.id == taskId }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Подробности дела") },
+                title = { Text(stringResource(R.string.task_detail)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Text("←")
+                    IconButton(
+                        onClick = { navController.popBackStack() }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_arrow_back_24),
+                            contentDescription = "Описание иконки"
+                        )
                     }
                 }
             )
         }
     ) { padding ->
         if (task == null) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Дело не найдено")
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(stringResource(R.string.task_not_found))
             }
-            return@Scaffold
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            Text(text = task.name, style = MaterialTheme.typography.headlineMedium)
-            Text(text = task.getTimeRange(), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(text = task.description, style = MaterialTheme.typography.bodyLarge)
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(16.dp)
+            ) {
+                Text(text = task.name, style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    text = task.getTimeRange(),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = task.description.ifBlank { "Нет описания" },
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }

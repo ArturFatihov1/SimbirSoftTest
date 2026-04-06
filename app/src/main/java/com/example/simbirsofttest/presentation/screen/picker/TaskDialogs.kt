@@ -10,6 +10,8 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.simbirsofttest.R
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -43,9 +45,9 @@ fun DatePickerDialogComposable(
                     )
                 }
                 onDismiss()
-            }) { Text("OK") }
+            }) { Text(stringResource(R.string.confirm)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Отмена") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     ) {
         DatePicker(state = datePickerState)
     }
@@ -76,8 +78,8 @@ fun TimePickerDialogComposable(
             TextButton(onClick = {
                 onTimeSelected(LocalTime.of(timePickerState.hour, timePickerState.minute))
                 onDismiss()
-            }) { Text("OK") }
+            }) { Text(stringResource(R.string.confirm)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Отмена") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }
