@@ -53,6 +53,9 @@ fun AddTaskScreen(
     var showStartTime by remember { mutableStateOf(false) }
     var showEndTime by remember { mutableStateOf(false) }
 
+    val isTimeValid = startTime.isBefore(endTime)
+    val isDataValid = name.isNotBlank() && isTimeValid
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,10 +87,20 @@ fun AddTaskScreen(
             TimeField(stringResource(R.string.start), startTime) { showStartTime = true }
             TimeField(stringResource(R.string.finish), endTime) { showEndTime = true }
 
+            if (!isTimeValid) {
+                Text(
+                    text = stringResource(R.string.finish_more_start),
+                    color = androidx.compose.ui.graphics.Color.Red,
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
+                enabled = isDataValid,
                 onClick = {
                     if (name.isNotBlank()) {
                         val start = selectedDate.atTime(startTime).atZone(ZoneId.systemDefault())
