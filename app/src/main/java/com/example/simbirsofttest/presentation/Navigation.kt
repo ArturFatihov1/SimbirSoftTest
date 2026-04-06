@@ -1,7 +1,6 @@
 package com.example.simbirsofttest.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,52 +13,34 @@ import com.example.simbirsofttest.presentation.screen.MainScreen
 object Routes {
     const val MAIN = "main"
     const val ADD_TASK = "add_task"
-    const val DETAIL = "detail/{taskId}"
-}
-
-object Args {
-    const val TASK_ID = "taskId"
+    const val DETAIL = "detail"
 }
 
 @Composable
-fun AppNavigation(
-    viewModel: TaskViewModel = TaskViewModel()
-) {
+fun AppNavigation() {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
         startDestination = Routes.MAIN
     ) {
-        composable(route = Routes.MAIN) {
-            MainScreen(
-                viewModel = viewModel,
-                navController = navController
-            )
+        composable(Routes.MAIN) {
+            MainScreen(navController = navController)
         }
 
-        composable(route = Routes.ADD_TASK) {
-            AddTaskScreen(
-                viewModel = viewModel,
-                navController = navController
-            )
+        composable(Routes.ADD_TASK) {
+            AddTaskScreen(navController = navController)
         }
 
         composable(
-            route = Routes.DETAIL,
+            route = "${Routes.DETAIL}/{taskId}",
             arguments = listOf(
-                navArgument(Args.TASK_ID) {
-                    type = NavType.IntType
-                }
+                navArgument("taskId") { type = NavType.IntType }
             )
         ) { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getInt(Args.TASK_ID) ?: -1
-
-            val task = viewModel.tasksForDay.value.find { it.id == taskId }
-                ?: viewModel.allTasks.collectAsState().value.find { it.id == taskId }
-
+            val taskId = backStackEntry.arguments?.getInt("taskId") ?: -1
             DetailScreen(
-                task = task,
+                taskId = taskId,
                 navController = navController
             )
         }

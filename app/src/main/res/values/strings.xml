@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">SimbirSoftTest</string>
+    <string name="select_date">Выбрать дату</string>
+    <string name="calendar">Календарь</string>
+    <string name="task_detail">Детали дела</string>
+    <string name="new_task">Новое дело</string>
+    <string name="task_not_found">Дело не найдено</string>
+    <string name="start">Начало</string>
+    <string name="finish">Конец</string>
+    <string name="save">Сохранить</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Отмена</string>
 </resources>
